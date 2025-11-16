@@ -1,6 +1,7 @@
 import discord
 import os
 from dotenv import load_dotenv
+from src.AI import client as ai_client
 
 load_dotenv()
 
@@ -17,8 +18,15 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+    
+    
 
-    if message.content.startswith('!t hello'):
-        await message.channel.send('Hello!')
+    if message.content.startswith('d!t'):
+        await message.channel.send(
+            ai_client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=message.content[4:],
+            ).text
+        )
 
 client.run(os.getenv('BOT_TOKEN'))
